@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Bilhetagem</title>
+<meta name="theme-color" content="#0b1220">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bilhetagem">
+
+<link rel="stylesheet" href="./bilhetagem.css">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-192.svg">
+
+</head>
+
+<body>
+
+<header class="app-header">
+  <h1 class="app-title">Bilhetagem</h1>
+  <div class="topo">
+  <input type="date" id="data" onchange="salvarTopo()">
+
+  <div class="topo-linha">
+    <select id="turno" onchange="salvarTopo()">
+      <option value="">Turno</option>
+      <option>MANHA</option>
+      <option>TARDE</option>
+    </select>
+
+    <select id="funcionario" onchange="preencherReg(); salvarTopo()">
+      <option value="">Funcionario</option>
+    </select>
+    
+    <input type="text" id="reg" placeholder="Reg" onchange="salvarTopo()">
+    
+  </div>
+
+  <div class="topo-acao">
+    <button id="btnIniciarTurno" class="btn-iniciar" type="button" onclick="iniciarTurno()">INICIAR TURNO</button>
+  </div>
+  </div>
+</header>
+
+<main class="app-main">
+<div class="fechamento-banco-wrapper">
+  <div class="coluna-stack">
+    <div id="resumo"></div>
+    <div id="resumo-bilheteria"></div>
+    <div class="linha-botoes">
+      <button class="btn-exportar" type="button" onclick="exportar()"><span class="btn-ico" aria-hidden="true">&#8615;</span> EXPORTAR</button>
+      <button class="btn-reset" type="button" onclick="resetar()"><span class="btn-ico" aria-hidden="true">&#9632;</span> ENCERRAR</button>
+      <button id="btnAddViagem" class="btn-add-viagem" type="button" onclick="abrirModalAddViagem()"><span class="btn-ico" aria-hidden="true">+</span> VIAGEM</button>
+    </div>
+  </div>
+
+<div class="coluna-stack">
+<div class="card-banco">
+  <h3>BANCO DO BRASIL</h3>
+
+  <div class="banco-grid">
+
+    <!-- COLUNA ESQUERDA -->
+    <div>
+
+      <div class="campo">
+        <label>CC Inicial</label>
+        <div class="input-money">
+          <span>R$</span>
+          <input type="text" inputmode="decimal" id="ccInicial" oninput="formatarMoeda(this); calcularPixInicial()">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Dep.</label>
+        <div class="input-money">
+          <span>R$</span>
+          <input type="text" inputmode="decimal" id="deposito" oninput="formatarMoeda(this); calcularPixInicial()">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Saque</label>
+        <div class="input-money">
+          <span>R$</span>
+          <input type="text" inputmode="decimal" id="saque" oninput="formatarMoeda(this); calcularPixInicial()">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLUNA DIREITA -->
+    <div>
+
+      <div class="campo">
+        <label>Pix Inicial</label>
+        <div class="input-money">
+          <span>R$</span>
+          <input type="text" id="pixInicial" readonly>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Pix Final</label>
+        <div class="input-money">
+          <span>R$</span>
+          <input type="text" inputmode="decimal" id="pixFinal" oninput="formatarMoeda(this); calcularSaldoPix()">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Saldo PIX do Dia</label>
+        <div class="input-money">
+          <span>R$</span>
+          <input type="text" id="saldoPix" readonly>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+  <div class="series-topo">
+  <div class="series-topo-titulo">N&Uacute;MERO DE S&Eacute;RIE</div>
+
+  <div class="card-serie inteira">
+    <h3>INTEIRA</h3>
+    Inicial: <input id="iniInteira" type="number" inputmode="numeric"><br>
+    Final: <input id="fimInteira" disabled>
+  </div>
+
+  <div class="card-serie meia">
+    <h3>MEIA</h3>
+    Inicial: <input id="iniMeia" type="number" inputmode="numeric"><br>
+    Final: <input id="fimMeia" disabled>
+  </div>
+
+  <div class="card-serie isento">
+    <h3>ISENTO</h3>
+    Inicial: <input id="iniIsento" type="number" inputmode="numeric"><br>
+    Final: <input id="fimIsento" disabled>
+  </div>
+
+  </div>
+</div>
+</div>
+
+<div id="viagens"></div>
+</main>
+
+<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<div id="modalAddViagem" class="modal-overlay" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalAddViagemTitulo">
+    <h2 id="modalAddViagemTitulo" class="modal-titulo">Adicionar viagem</h2>
+
+    <form id="modalAddViagemAuto" class="modal-form">
+      <div class="campo">
+        <label for="autoInicio">Início (primeira viagem)</label>
+        <input type="time" id="autoInicio" value="10:00" required>
+      </div>
+      <div class="campo">
+        <label for="autoTermino">Término (última viagem)</label>
+        <input type="time" id="autoTermino" value="17:00" required>
+      </div>
+      <div class="campo">
+        <label for="autoIntervalo">Intervalo</label>
+        <select id="autoIntervalo" required>
+          <option value="20">20 min</option>
+          <option value="30">30 min</option>
+          <option value="40">40 min</option>
+          <option value="60">60 min</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="autoBonde">Bonde</label>
+        <select id="autoBonde" required onchange="preencherCapacidadeAutomatica()">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="autoCapacidade">Capacidade</label>
+        <input type="number" id="autoCapacidade" inputmode="numeric" min="1" required>
+      </div>
+      <p id="autoPreview" class="modal-preview"></p>
+      <div class="modal-acoes">
+        <button type="button" class="btn-modal-opcao" onclick="addViagemManual(); fecharModalAddViagem();">Inserir manualmente</button>
+        <button type="submit" class="btn-modal-prim">Gerar viagens</button>
+      </div>
+    </form>
+
+    <button type="button" class="modal-fechar" onclick="fecharModalAddViagem()" aria-label="Fechar">×</button>
+  </div>
+</div>
+
+<script src="./boot.js"></script>
+<script src="./bilhetagem.js?v=20" defer></script>
+
+</body>
+</html>

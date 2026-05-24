@@ -1,0 +1,52 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/bilhetagem.html"
+  status = 200
+
+[[redirects]]
+  from = "/BILHETAGEM.html"
+  to = "/bilhetagem.html"
+  status = 200
+
+[[redirects]]
+  from = "/BILHETAGEM.css"
+  to = "/bilhetagem.css"
+  status = 200
+
+[[redirects]]
+  from = "/BILHETAGEM.js"
+  to = "/bilhetagem.js"
+  status = 200
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/boot.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/bilhetagem.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
