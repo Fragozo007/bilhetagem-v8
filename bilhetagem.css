@@ -251,129 +251,97 @@ button:disabled {
   gap: 8px;
 }
 
-.vendas-dia {
-  margin-top: 0;
-  padding: 10px 12px 12px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #164e63, #155e75);
-  border: 1px solid #2a2f3a;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.vendas-dia-titulo {
-  font-size: 20px;
-  font-weight: 700;
-  color: #f1c40f;
-  text-align: center;
-  margin-bottom: 10px;
-  letter-spacing: 0.04em;
-}
-
-.vendas-dia-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 10px;
+.vendas-dia .dashboard {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 6px;
   flex: 1 1 auto;
   min-height: 0;
 }
 
-.vendas-card {
-  border-radius: 16px;
-  padding: 10px 12px;
+.vendas-dia .box {
+  padding: 8px;
   min-height: 0;
-  height: 100%;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
-  color: #0f172a;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
-.vendas-card__titulo {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  margin-bottom: 8px;
-  color: inherit;
-}
-
-.vendas-card:not(.vendas-card--reserva) .vendas-card__corpo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.vendas-dia .box.inteira,
+.vendas-dia .box.meia,
+.vendas-dia .box.isento {
   justify-content: flex-start;
-  flex: 1 1 auto;
-  min-height: 0;
+  align-items: stretch;
 }
 
-.vendas-card__dados {
+.vendas-dia .box-vendas-dia__dados {
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 3px;
+  gap: 2px;
   width: 100%;
 }
 
-.vendas-card__qtd {
-  font-size: 1.45rem;
-  font-weight: 800;
-  line-height: 1.1;
-}
-
-.vendas-card__valor {
-  font-size: 0.9rem;
-  font-weight: 700;
-  opacity: 0.95;
-}
-
-.vendas-card__serie-linha {
+.vendas-dia .box-vendas-dia__serie {
   font-size: 14px;
-  font-weight: 600;
-  line-height: 1.3;
+  font-weight: bold;
+  line-height: 1.35;
 }
 
-.vendas-card--inteira {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  color: #052e16;
+.box.reserva {
+  background: #fff;
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.14);
 }
 
-.vendas-card--meia {
-  background: linear-gradient(135deg, #e73737, #e03a3a);
-  color: #3f0a0a;
-}
-
-.vendas-card--isento {
-  background: linear-gradient(135deg, #bdc3c7, #95a5a6);
-  color: #1e293b;
-}
-
-.vendas-card--reserva {
-  background: #f3f4f6;
-  color: #111827;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  display: flex;
-  flex-direction: column;
+.vendas-dia .box.reserva {
+  justify-content: flex-start;
   align-items: stretch;
+  text-align: center;
 }
 
-.vendas-card--reserva .vendas-card__titulo {
-  color: #111827;
+.vendas-dia .box.reserva .titulo {
+  font-size: 12px;
+  opacity: 0.8;
+  flex-shrink: 0;
+  margin-top: 0;
 }
 
-.vendas-card__qtd-solo {
-  flex: 1;
+.vendas-dia .box.reserva .box-reserva__corpo {
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.65rem;
+  min-height: 0;
+}
+
+.vendas-dia .box.reserva .box-reserva__contador {
+  font-size: 2.1rem;
   font-weight: 800;
+  margin: 0;
   line-height: 1;
-  min-height: 40px;
+}
+
+.vendas-dia {
+  margin-top: 0;
+  padding: 8px;
+  border-radius: 14px;
+  background: #0f4c5c;
+  border: 1px solid #2a2f3a;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vendas-dia-titulo {
+  font-size: 19px;
+  font-weight: 700;
+  color: #f1c40f;
+  text-align: center;
+  margin-bottom: 6px;
 }
 
 /* TODAS AS BOXES IGUAIS */
@@ -1660,18 +1628,14 @@ input.card-viagem__meta-valor--hora::-webkit-datetime-edit-text {
   font-weight: 800;
 }
 
-@media (max-width: 380px) {
-  .vendas-card__qtd {
-    font-size: 1.3rem;
-  }
+.vendas-dia .box .valor:first-of-type {
+  font-size: 1.45rem;
+  font-weight: 800;
+}
 
-  .vendas-card__qtd-solo {
-    font-size: 1.45rem;
-  }
-
-  .vendas-card__serie-linha {
-    font-size: 12px;
-  }
+.vendas-dia .box .valor:nth-of-type(2) {
+  font-size: 0.95rem;
+  opacity: 0.9;
 }
 
 .campo label .ico {
@@ -1752,23 +1716,24 @@ input.card-viagem__meta-valor--hora::-webkit-datetime-edit-text {
   #resumo-bilheteria {
     flex: 1 1 auto !important;
     min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .vendas-dia {
     padding: 8px !important;
     flex: 1 1 auto !important;
-  }
-
-  .vendas-dia-grid {
-    gap: 8px !important;
-    flex: 1 1 auto !important;
-    grid-template-rows: 1fr 1fr !important;
-  }
-
-  .vendas-card {
-    padding: 10px !important;
     min-height: 0 !important;
-    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .vendas-dia .dashboard {
+    gap: 8px !important;
+  }
+
+  .vendas-dia .box {
+    padding: 10px !important;
   }
 
   .linha-botoes {

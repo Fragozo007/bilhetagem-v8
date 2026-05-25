@@ -962,32 +962,6 @@ function total(h) {
   return h.inteira * 7 + h.meia * 3.5;
 }
 
-function htmlCardVendasDia(tipo, qtd, valorReais, inicial, final, vendidas) {
-  if (tipo === "reserva") {
-    return `
-    <div class="vendas-card vendas-card--reserva">
-      <div class="vendas-card__titulo">RES/PMS</div>
-      <div class="vendas-card__qtd-solo">${qtd}</div>
-    </div>`;
-  }
-
-  const ini = vendidas > 0 ? inicial : "-";
-  const fim = vendidas > 0 ? final : "-";
-
-  return `
-    <div class="vendas-card vendas-card--${tipo}">
-      <div class="vendas-card__titulo">${tipo === "inteira" ? "INTEIRA" : tipo === "meia" ? "MEIA" : "ISENTO"}</div>
-      <div class="vendas-card__corpo">
-        <div class="vendas-card__dados">
-          <div class="vendas-card__qtd">${qtd}</div>
-          <div class="vendas-card__valor">R$ ${formatarNumero(valorReais)}</div>
-          <div class="vendas-card__serie-linha">Inicial: ${ini}</div>
-          <div class="vendas-card__serie-linha">Final: ${fim}</div>
-        </div>
-      </div>
-    </div>`;
-}
-
 function calcularResumo() {
 
   let totalPessoas = 0;
@@ -1197,13 +1171,50 @@ document.getElementById("resumo").innerHTML =
 document.getElementById("resumo-bilheteria").innerHTML =
   `
   <div class="vendas-dia">
-    <div class="vendas-dia-titulo">VENDAS DO DIA</div>
-    <div class="vendas-dia-grid">
-      ${htmlCardVendasDia("inteira", resumo.totalInteira, valorInteiraCard, inicialInteira, finalInteira, vendidasInteira)}
-      ${htmlCardVendasDia("meia", resumo.totalMeia, valorMeiaCard, inicialMeia, finalMeia, vendidasMeia)}
-      ${htmlCardVendasDia("isento", resumo.totalIsento, 0, inicialIsento, finalIsento, vendidasIsento)}
-      ${htmlCardVendasDia("reserva", resumo.totalReserva)}
+  <div class="vendas-dia-titulo">VENDAS DO DIA</div>
+  <div class="dashboard">
+
+    <div class="box inteira">
+  <div class="titulo">INTEIRA</div>
+
+  <div class="box-vendas-dia__dados">
+    <div class="valor">${resumo.totalInteira}</div>
+    <div class="valor">R$ ${formatarNumero(valorInteiraCard)}</div>
+    <div class="box-vendas-dia__serie">Inicial: ${vendidasInteira > 0 ? inicialInteira : "-"}</div>
+    <div class="box-vendas-dia__serie">Final: ${vendidasInteira > 0 ? finalInteira : "-"}</div>
+  </div>
+</div>
+
+    <div class="box meia">
+  <div class="titulo">MEIA</div>
+
+  <div class="box-vendas-dia__dados">
+    <div class="valor">${resumo.totalMeia}</div>
+    <div class="valor">R$ ${formatarNumero(valorMeiaCard)}</div>
+    <div class="box-vendas-dia__serie">Inicial: ${vendidasMeia > 0 ? inicialMeia : "-"}</div>
+    <div class="box-vendas-dia__serie">Final: ${vendidasMeia > 0 ? finalMeia : "-"}</div>
+  </div>
+</div>
+
+    <div class="box isento">
+  <div class="titulo">ISENTO</div>
+
+  <div class="box-vendas-dia__dados">
+    <div class="valor">${resumo.totalIsento}</div>
+    <div class="valor">R$ ${formatarNumero(0)}</div>
+    <div class="box-vendas-dia__serie">Inicial: ${vendidasIsento > 0 ? inicialIsento : "-"}</div>
+    <div class="box-vendas-dia__serie">Final: ${vendidasIsento > 0 ? finalIsento : "-"}</div>
+  </div>
+</div>
+
+    <div class="box reserva">
+      <div class="titulo">RES/PMS</div>
+      <div class="box-reserva__corpo">
+        <div class="valor box-reserva__contador">${resumo.totalReserva}</div>
+      </div>
     </div>
+
+  </div>
   </div>
   `;
 
