@@ -978,13 +978,11 @@ function htmlCardVendasDia(tipo, qtd, valorReais, inicial, final, vendidas) {
     <div class="vendas-card vendas-card--${tipo}">
       <div class="vendas-card__titulo">${tipo === "inteira" ? "INTEIRA" : tipo === "meia" ? "MEIA" : "ISENTO"}</div>
       <div class="vendas-card__corpo">
-        <div class="vendas-card__esq">
+        <div class="vendas-card__dados">
           <div class="vendas-card__qtd">${qtd}</div>
           <div class="vendas-card__valor">R$ ${formatarNumero(valorReais)}</div>
-        </div>
-        <div class="vendas-card__serie">
-          <div>Inicial: ${ini}</div>
-          <div>Final: ${fim}</div>
+          <div class="vendas-card__serie-linha">Inicial: ${ini}</div>
+          <div class="vendas-card__serie-linha">Final: ${fim}</div>
         </div>
       </div>
     </div>`;

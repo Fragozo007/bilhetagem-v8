@@ -301,18 +301,22 @@ button:disabled {
   color: inherit;
 }
 
-.vendas-card__corpo {
+.vendas-card:not(.vendas-card--reserva) .vendas-card__corpo {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   flex: 1 1 auto;
   min-height: 0;
 }
 
-.vendas-card__esq {
+.vendas-card__dados {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   text-align: left;
-  min-width: 0;
+  gap: 3px;
+  width: 100%;
 }
 
 .vendas-card__qtd {
@@ -324,16 +328,13 @@ button:disabled {
 .vendas-card__valor {
   font-size: 0.9rem;
   font-weight: 700;
-  margin-top: 2px;
   opacity: 0.95;
 }
 
-.vendas-card__serie {
-  text-align: right;
+.vendas-card__serie-linha {
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.35;
-  flex-shrink: 0;
+  line-height: 1.3;
 }
 
 .vendas-card--inteira {
@@ -1668,7 +1669,7 @@ input.card-viagem__meta-valor--hora::-webkit-datetime-edit-text {
     font-size: 1.45rem;
   }
 
-  .vendas-card__serie {
+  .vendas-card__serie-linha {
     font-size: 12px;
   }
 }
