@@ -202,8 +202,13 @@ button:disabled {
   min-height: 100%;
 }
 
+.fechamento-banco-wrapper > .coluna-stack:first-child {
+  gap: 6px;
+}
+
 .fechamento-banco-wrapper #resumo {
   min-width: 0;
+  flex: 0 0 auto;
 }
 
 .fechamento-banco-wrapper #resumo .box.total {
@@ -219,6 +224,10 @@ button:disabled {
 
 #resumo-bilheteria {
   margin-bottom: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 @media (max-width: 640px) {
@@ -248,6 +257,10 @@ button:disabled {
   border-radius: 16px;
   background: linear-gradient(135deg, #164e63, #155e75);
   border: 1px solid #2a2f3a;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .vendas-dia-titulo {
@@ -262,15 +275,21 @@ button:disabled {
 .vendas-dia-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .vendas-card {
   border-radius: 16px;
   padding: 10px 12px;
-  min-height: 92px;
+  min-height: 0;
+  height: 100%;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
   color: #0f172a;
+  display: flex;
+  flex-direction: column;
 }
 
 .vendas-card__titulo {
@@ -287,6 +306,8 @@ button:disabled {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .vendas-card__esq {
@@ -703,6 +724,7 @@ button:disabled {
   gap: 10px;
   margin-top: auto;
   margin-bottom: 0;
+  flex: 0 0 auto;
 }
 
 .linha-botoes button {
@@ -1711,23 +1733,37 @@ input.card-viagem__meta-valor--hora::-webkit-datetime-edit-text {
     margin: 0 !important;
   }
 
+  .fechamento-banco-wrapper > .coluna-stack:first-child {
+    gap: 4px !important;
+  }
+
+  #resumo-bilheteria {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+
   .vendas-dia {
     padding: 8px !important;
+    flex: 1 1 auto !important;
   }
 
   .vendas-dia-grid {
     gap: 8px !important;
+    flex: 1 1 auto !important;
+    grid-template-rows: 1fr 1fr !important;
   }
 
   .vendas-card {
     padding: 10px !important;
-    min-height: 100px !important;
+    min-height: 0 !important;
+    height: 100% !important;
   }
 
   .linha-botoes {
     margin-top: auto !important;
     margin-bottom: 0 !important;
     gap: 8px !important;
+    flex: 0 0 auto !important;
   }
 
   .linha-botoes button {
