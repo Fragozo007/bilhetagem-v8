@@ -1,4 +1,4 @@
-const ASSET_VERSION = "20";
+const ASSET_VERSION = "21";
 const CACHE_NAME = "bilhetagem-v" + ASSET_VERSION;
 
 const APP_SHELL = [

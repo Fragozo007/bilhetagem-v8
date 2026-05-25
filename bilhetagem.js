@@ -962,6 +962,34 @@ function total(h) {
   return h.inteira * 7 + h.meia * 3.5;
 }
 
+function htmlCardVendasDia(tipo, qtd, valorReais, inicial, final, vendidas) {
+  if (tipo === "reserva") {
+    return `
+    <div class="vendas-card vendas-card--reserva">
+      <div class="vendas-card__titulo">RES/PMS</div>
+      <div class="vendas-card__qtd-solo">${qtd}</div>
+    </div>`;
+  }
+
+  const ini = vendidas > 0 ? inicial : "-";
+  const fim = vendidas > 0 ? final : "-";
+
+  return `
+    <div class="vendas-card vendas-card--${tipo}">
+      <div class="vendas-card__titulo">${tipo === "inteira" ? "INTEIRA" : tipo === "meia" ? "MEIA" : "ISENTO"}</div>
+      <div class="vendas-card__corpo">
+        <div class="vendas-card__esq">
+          <div class="vendas-card__qtd">${qtd}</div>
+          <div class="vendas-card__valor">R$ ${formatarNumero(valorReais)}</div>
+        </div>
+        <div class="vendas-card__serie">
+          <div>Inicial: ${ini}</div>
+          <div>Final: ${fim}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function calcularResumo() {
 
   let totalPessoas = 0;
@@ -1087,17 +1115,8 @@ function render() {
   </datalist>
   `;
 
-  let totalValor = 0;
-  let totalPessoas = 0;
-  let totalInteira = 0;
-  let totalMeia = 0;
-  let totalIsento = 0;
-
   viagensOrdenadas.forEach((h) => {
     const i = dados.viagens.findIndex((v) => v.id === h.id);
-    const t = total(h);
-    totalValor += t;
-    totalPessoas += h.inteira + h.meia + h.isento + h.reserva;
     recalcularRestante(h);
     div.innerHTML += renderCardViagem(
       h,
@@ -1113,18 +1132,10 @@ function render() {
   
   div.innerHTML += lista;
 
-dados.viagens.forEach(v => {
+dados.viagens.forEach((v) => {
   if (v.reserva === undefined) v.reserva = 0;
-
-  totalInteira += v.inteira;
-  totalMeia += v.meia;
-  totalIsento += v.isento;
 });
 
-    let valorInteira = totalInteira * 7;
-    let valorMeia = totalMeia * 3.5;
-    let valorIsento = 0;
-    
     // ===== SERIES VENDIDAS (IGUAL EXPORTACAO) =====
 
 let vendidasInteira = dados.bilhetes.inteira.atual - dados.bilhetes.inteira.inicial;
@@ -1182,71 +1193,20 @@ document.getElementById("resumo").innerHTML =
   
   `;
 
+    const valorInteiraCard = resumo.totalInteira * 7;
+    const valorMeiaCard = resumo.totalMeia * 3.5;
+
 document.getElementById("resumo-bilheteria").innerHTML =
   `
   <div class="vendas-dia">
-  <div class="vendas-dia-titulo">VENDAS DO DIA</div>
-  <div class="dashboard">
-
-    <div class="box inteira">
-  <div class="titulo">INTEIRA</div>
-
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; gap:10px;">
-
-    <!-- LADO ESQUERDO -->
-    <div style="text-align:left;">
-      <div class="valor">${totalInteira}</div>
-      <div class="valor">R$ ${valorInteira.toFixed(2)}</div>
+    <div class="vendas-dia-titulo">VENDAS DO DIA</div>
+    <div class="vendas-dia-grid">
+      ${htmlCardVendasDia("inteira", resumo.totalInteira, valorInteiraCard, inicialInteira, finalInteira, vendidasInteira)}
+      ${htmlCardVendasDia("meia", resumo.totalMeia, valorMeiaCard, inicialMeia, finalMeia, vendidasMeia)}
+      ${htmlCardVendasDia("isento", resumo.totalIsento, 0, inicialIsento, finalIsento, vendidasIsento)}
+      ${htmlCardVendasDia("reserva", resumo.totalReserva)}
     </div>
-
-    <!-- LADO DIREITO -->
-    <div style="text-align:right; font-size:14px;">
-      <div>Inicial: ${vendidasInteira > 0 ? inicialInteira : "-"}</div>
-      <div>Final: ${vendidasInteira > 0 ? finalInteira : "-"}</div>
-    </div>
-
   </div>
-</div>
-
-    <div class="box meia">
-  <div class="titulo">MEIA</div>
-
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:6px; gap:10px;">
-
-    <!-- ESQUERDA -->
-    <div style="text-align:left;">
-      <div class="valor">${totalMeia}</div>
-      <div class="valor">R$ ${valorMeia.toFixed(2)}</div>
-    </div>
-
-    <!-- DIREITA -->
-    <div style="text-align:right; font-size:14px;">
-      <div>Inicial: ${vendidasMeia > 0 ? inicialMeia : "-"}</div>
-      <div>Final: ${vendidasMeia > 0 ? finalMeia : "-"}</div>
-    </div>
-
-  </div>
-</div>
-
-    <div class="box isento">
-  <div class="titulo">ISENTO</div>
-
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:6px; gap:10px;">
-
-    <!-- ESQUERDA -->
-    <div style="text-align:left;">
-      <div class="valor">${totalIsento}</div>
-      <div class="valor">R$ 0.00</div>
-    </div>
-
-    <!-- DIREITA -->
-    <div style="text-align:right; font-size:14px;">
-      <div>Inicial: ${vendidasIsento > 0 ? inicialIsento : "-"}</div>
-      <div>Final: ${vendidasIsento > 0 ? finalIsento : "-"}</div>
-    </div>
-
-  </div>
-</div>
   `;
 
 restaurarFoco();
@@ -1554,7 +1514,7 @@ if ("serviceWorker" in navigator) {
 
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./sw.js?v=20")
+      .register("./sw.js?v=21")
       .then((reg) => {
         reg.update();
         if (reg.waiting) {
