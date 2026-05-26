@@ -1,5 +1,5 @@
 (function () {
-  var VERSAO = "21";
+  var VERSAO = "27";
   var chave = "bilhetagem_cache_limpa";
 
   if (localStorage.getItem(chave) === VERSAO) return;

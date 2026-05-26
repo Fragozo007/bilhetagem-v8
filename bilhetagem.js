@@ -596,6 +596,13 @@ function criarNovaViagem(overrides = {}) {
 
 function scrollParaViagens() {
   setTimeout(() => {
+    const alvo =
+      document.getElementById("viagem-detalhe") ||
+      document.getElementById("viagens-grade");
+    if (alvo) {
+      alvo.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     window.scrollTo({
       top: document.body.scrollHeight,
       behavior: "smooth"
@@ -726,9 +733,17 @@ function addViagemManual() {
     return;
   }
 
+  const idsNovos = [];
   for (let i = 0; i < quantidade; i++) {
-    dados.viagens.push(criarNovaViagem());
+    const v = criarNovaViagem();
+    idsNovos.push(v.id);
+    dados.viagens.push(v);
   }
+
+  const ordenadas = [...dados.viagens].sort(ordenarViagensPorHora);
+  const primeiraNova =
+    ordenadas.find((v) => idsNovos.includes(v.id)) || ordenadas[0];
+  viagemSelecionadaId = primeiraNova?.id ?? null;
 
   salvar();
   render();
@@ -781,14 +796,19 @@ function confirmarAddViagemAutomatica(event) {
     return;
   }
 
+  let primeiraId = null;
   horarios.forEach((hora) => {
-    dados.viagens.push(criarNovaViagem({
+    const v = criarNovaViagem({
       hora,
       nome: bonde,
       capacidade,
       restante: capacidade
-    }));
+    });
+    if (primeiraId === null) primeiraId = v.id;
+    dados.viagens.push(v);
   });
+
+  viagemSelecionadaId = primeiraId;
 
   salvarHistorico(bonde, capacidade);
   salvar();
@@ -998,6 +1018,82 @@ let foco = {
   campo: null
 };
 
+let viagemSelecionadaId = null;
+
+function rotuloBlocoViagem(viagem, viagensOrdenadas) {
+  const idx = viagensOrdenadas.indexOf(viagem);
+  if (viagem.hora) {
+    const mesmoHorario = viagensOrdenadas.filter((v) => v.hora === viagem.hora);
+    if (mesmoHorario.length > 1) {
+      const n = mesmoHorario.indexOf(viagem) + 1;
+      return `${viagem.hora} (${n})`;
+    }
+    return viagem.hora;
+  }
+  return `Viagem ${idx + 1}`;
+}
+
+function garantirViagemSelecionada(viagensOrdenadas, opts = {}) {
+  const { preferirId } = opts;
+
+  if (viagensOrdenadas.length === 0) {
+    viagemSelecionadaId = null;
+    return null;
+  }
+
+  if (preferirId && viagensOrdenadas.some((v) => v.id === preferirId)) {
+    viagemSelecionadaId = preferirId;
+    return preferirId;
+  }
+
+  if (
+    viagemSelecionadaId &&
+    viagensOrdenadas.some((v) => v.id === viagemSelecionadaId)
+  ) {
+    return viagemSelecionadaId;
+  }
+
+  viagemSelecionadaId = viagensOrdenadas[0].id;
+  return viagemSelecionadaId;
+}
+
+function selecionarViagem(id) {
+  if (!dados.viagens.some((v) => v.id === id)) return;
+  viagemSelecionadaId = id;
+  render();
+  scrollParaViagens();
+}
+
+function renderGradeHorarios(viagensOrdenadas) {
+  let html =
+    '<section class="viagens-grade" id="viagens-grade" aria-label="Hor\u00e1rios das viagens"><div class="viagens-grade__grid">';
+
+  viagensOrdenadas.forEach((h) => {
+    const st = obterStatusOcupacao(h);
+    const tipoClasse = h.tipo === "AGENDAMENTO" ? "agendamento" : "publico";
+    const selecionada = h.id === viagemSelecionadaId;
+    const rotulo = escaparHtml(rotuloBlocoViagem(h, viagensOrdenadas));
+    const titleParts = [];
+    if (h.nome) titleParts.push(h.nome);
+    titleParts.push(st.label);
+    const title = escaparHtml(titleParts.join(" \u00b7 "));
+    const modFinalizada = h.finalizada ? " viagem-hora--finalizada" : "";
+
+    html += `
+      <button type="button"
+        class="viagem-hora viagem-hora--${tipoClasse}${modFinalizada}${selecionada ? " viagem-hora--ativa" : ""}"
+        onclick="selecionarViagem(${h.id})"
+        aria-pressed="${selecionada}"
+        title="${title}">
+        <span class="viagem-hora__texto">${rotulo}</span>
+      </button>
+    `;
+  });
+
+  html += "</div></section>";
+  return html;
+}
+
 function restaurarFoco() {
   if (!foco.id || !foco.campo) return;
 
@@ -1087,21 +1183,31 @@ function render() {
   </datalist>
   `;
 
-  viagensOrdenadas.forEach((h) => {
-    const i = dados.viagens.findIndex((v) => v.id === h.id);
-    recalcularRestante(h);
-    div.innerHTML += renderCardViagem(
-      h,
-      i,
-      viagensOrdenadas,
-      espelhoFimInteira,
-      espelhoFimMeia,
-      espelhoFimIsento
+  garantirViagemSelecionada(viagensOrdenadas);
+
+  if (viagensOrdenadas.length > 0) {
+    div.innerHTML = renderGradeHorarios(viagensOrdenadas);
+
+    const selecionada = viagensOrdenadas.find(
+      (v) => v.id === viagemSelecionadaId
     );
-  });
-  
+
+    if (selecionada) {
+      const i = dados.viagens.findIndex((v) => v.id === selecionada.id);
+      recalcularRestante(selecionada);
+      div.innerHTML += `<div class="viagem-detalhe" id="viagem-detalhe">${renderCardViagem(
+        selecionada,
+        i,
+        viagensOrdenadas,
+        espelhoFimInteira,
+        espelhoFimMeia,
+        espelhoFimIsento
+      )}</div>`;
+    }
+  }
+
   let dinheiro = Math.max(0, resumo.totalValor - saldoPixDia);
-  
+
   div.innerHTML += lista;
 
 dados.viagens.forEach((v) => {
@@ -1523,7 +1629,7 @@ if ("serviceWorker" in navigator) {
 
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./sw.js?v=21")
+      .register("./sw.js?v=27")
       .then((reg) => {
         reg.update();
         if (reg.waiting) {

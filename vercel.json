@@ -1,0 +1,78 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/bilhetagem.html" }
+  ],
+  "redirects": [
+    {
+      "source": "/BILHETAGEM.html",
+      "destination": "/bilhetagem.html",
+      "permanent": true
+    },
+    {
+      "source": "/BILHETAGEM.css",
+      "destination": "/bilhetagem.css",
+      "permanent": true
+    },
+    {
+      "source": "/BILHETAGEM.js",
+      "destination": "/bilhetagem.js",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/boot.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/bilhetagem.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/bilhetagem.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        }
+      ]
+    }
+  ]
+}
