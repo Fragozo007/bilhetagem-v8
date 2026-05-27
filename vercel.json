@@ -1,21 +1,36 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/bilhetagem.html" }
+    { "source": "/", "destination": "/bilhetagem-v8.html" }
   ],
   "redirects": [
     {
+      "source": "/bilhetagem.html",
+      "destination": "/bilhetagem-v8.html",
+      "permanent": true
+    },
+    {
+      "source": "/bilhetagem.css",
+      "destination": "/bilhetagem-v8.css",
+      "permanent": true
+    },
+    {
+      "source": "/bilhetagem.js",
+      "destination": "/bilhetagem-v8.js",
+      "permanent": true
+    },
+    {
       "source": "/BILHETAGEM.html",
-      "destination": "/bilhetagem.html",
+      "destination": "/bilhetagem-v8.html",
       "permanent": true
     },
     {
       "source": "/BILHETAGEM.css",
-      "destination": "/bilhetagem.css",
+      "destination": "/bilhetagem-v8.css",
       "permanent": true
     },
     {
       "source": "/BILHETAGEM.js",
-      "destination": "/bilhetagem.js",
+      "destination": "/bilhetagem-v8.js",
       "permanent": true
     }
   ],
@@ -39,7 +54,7 @@
       ]
     },
     {
-      "source": "/bilhetagem.js",
+      "source": "/bilhetagem-v8.js",
       "headers": [
         {
           "key": "Cache-Control",
@@ -48,7 +63,7 @@
       ]
     },
     {
-      "source": "/bilhetagem.html",
+      "source": "/bilhetagem-v8.html",
       "headers": [
         {
           "key": "Cache-Control",

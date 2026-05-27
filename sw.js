@@ -1,13 +1,13 @@
-const ASSET_VERSION = "27";
+const ASSET_VERSION = "28";
 const CACHE_NAME = "bilhetagem-v" + ASSET_VERSION;
 
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./bilhetagem.html",
-  "./bilhetagem.css",
+  "./bilhetagem-v8.html",
+  "./bilhetagem-v8.css",
   "./boot.js",
-  "./bilhetagem.js?v=" + ASSET_VERSION,
+  "./bilhetagem-v8.js?v=" + ASSET_VERSION,
   "./sw.js?v=" + ASSET_VERSION,
   "./manifest.webmanifest",
   "./icons/icon-192.svg",
@@ -72,7 +72,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
   if (isNavigationRequest(event.request) || isCodeAsset(url)) {
-    event.respondWith(networkFirst(event.request, "./bilhetagem.html"));
+    event.respondWith(networkFirst(event.request, "./bilhetagem-v8.html"));
     return;
   }
 
@@ -97,7 +97,7 @@ self.addEventListener("fetch", (event) => {
 
           return networkResponse;
         })
-        .catch(() => caches.match("./bilhetagem.html"));
+        .catch(() => caches.match("./bilhetagem-v8.html"));
     })
   );
 });

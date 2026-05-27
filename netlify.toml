@@ -3,22 +3,37 @@
 
 [[redirects]]
   from = "/"
-  to = "/bilhetagem.html"
+  to = "/bilhetagem-v8.html"
   status = 200
 
 [[redirects]]
+  from = "/bilhetagem.html"
+  to = "/bilhetagem-v8.html"
+  status = 301
+
+[[redirects]]
+  from = "/bilhetagem.css"
+  to = "/bilhetagem-v8.css"
+  status = 301
+
+[[redirects]]
+  from = "/bilhetagem.js"
+  to = "/bilhetagem-v8.js"
+  status = 301
+
+[[redirects]]
   from = "/BILHETAGEM.html"
-  to = "/bilhetagem.html"
+  to = "/bilhetagem-v8.html"
   status = 200
 
 [[redirects]]
   from = "/BILHETAGEM.css"
-  to = "/bilhetagem.css"
+  to = "/bilhetagem-v8.css"
   status = 200
 
 [[redirects]]
   from = "/BILHETAGEM.js"
-  to = "/bilhetagem.js"
+  to = "/bilhetagem-v8.js"
   status = 200
 
 [[headers]]
@@ -37,7 +52,7 @@
     Cache-Control = "no-cache, no-store, must-revalidate"
 
 [[headers]]
-  for = "/bilhetagem.html"
+  for = "/bilhetagem-v8.html"
   [headers.values]
     Cache-Control = "no-cache, must-revalidate"
 

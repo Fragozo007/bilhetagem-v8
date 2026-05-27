@@ -2,7 +2,7 @@
   "name": "Bilhetagem",
   "short_name": "Bilhetagem",
   "description": "Controle de bilhetagem, viagens e fechamento de turno.",
-  "start_url": "./bilhetagem.html",
+  "start_url": "./bilhetagem-v8.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0b1220",
